@@ -21,13 +21,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.githubusers.R
 import com.example.githubusers.model.models.User
 import com.example.githubusers.view.ui.theme.MelloDarkeWhite
@@ -58,13 +61,15 @@ fun GithubUserItem(
                 shape = CircleShape,
                 color = Color.White.copy(alpha = 0.1f),
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.baseline_person_24),
-                    contentDescription = "",
+                AsyncImage(model = user.avatar_url,
+                    contentDescription = "small avatar picture",
                     modifier = Modifier
-                        .size(20.dp)
-                        .padding(16.dp),
-                )
+                        .size(30.dp)
+                        .padding(10.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                placeholder = painterResource(id = R.drawable.baseline_person_24)
+                    )
             }
         }
         Column(

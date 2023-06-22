@@ -16,25 +16,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.githubusers.view.navigation.Navigation
-import com.example.githubusers.view.state.UserListState
+import com.example.githubusers.viewModel.GithubUsersViewModel
+import com.example.githubusers.viewModel.state.UserListState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun GithubUsersScreen(
     navController: NavController,
+    viewModel: GithubUsersViewModel = hiltViewModel()
 ) {
-    val state: UserListState = UserListState()
+    val state: UserListState = viewModel.state
     val swipeRefreshState = rememberSwipeRefreshState(
-        isRefreshing = false,
+        isRefreshing = viewModel.state.isRefreshing,
     )
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
         OutlinedTextField(
-            value = "ss",
+            value = state.searchQuery,
             onValueChange = {},
             modifier = Modifier
                 .padding(16.dp)

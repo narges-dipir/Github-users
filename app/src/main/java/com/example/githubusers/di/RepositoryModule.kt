@@ -11,7 +11,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
     @Binds
-    abstract fun bindGetTransactionRepository(
-        getTransactionsRepositoryImpl: GetGithubUsersRepositoryImpl,
+    abstract fun bindGithubUsersRepository(
+        geGithubUsersRepositoryImpl: GetGithubUsersRepositoryImpl,
     ): IGetGithubUsersRepository
 }

@@ -60,5 +60,5 @@ data class GithubUsersResponse(
     val site_admin: Boolean,
     @SerializedName("score")
     @Expose
-    val score: Double,
+    val score: Double
 )

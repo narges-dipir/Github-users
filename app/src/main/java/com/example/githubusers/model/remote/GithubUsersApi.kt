@@ -1,10 +1,10 @@
 package com.example.githubusers.model.remote
 
-import com.example.githubusers.model.models.GithubUsersResponse
+import com.example.githubusers.model.models.GithubResponse
 import retrofit2.http.GET
 
 interface GithubUsersApi {
 
-    @GET()
-    suspend fun getAllUsers(): List<GithubUsersResponse>
+    @GET("/search/users?q=type%3Aall")
+    suspend fun getAllUsers(): GithubResponse
 }

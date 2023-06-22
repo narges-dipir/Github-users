@@ -9,8 +9,9 @@ import com.example.githubusers.utiles.ResultWrapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class GetGithubUsersRepositoryImpl constructor(
+class GetGithubUsersRepositoryImpl @Inject constructor(
     private val transactionApi: GithubUsersApi,
     private val transactionsDao: GithubUsersDao,
 ) : IGetGithubUsersRepository {
@@ -20,7 +21,7 @@ class GetGithubUsersRepositoryImpl constructor(
             if (transactionsDao.getAllUsers().isNotEmpty()) {
                 emit(ResultWrapper.Success(transactionsDao.getAllUsers().map { it -> it.mapToUser() }))
             } else {
-                transactionApi.getAllUsers().forEach {
+                transactionApi.getAllUsers().items.forEach {
                     saveUser(it.mapToUser())
                 }
                 emit(ResultWrapper.Success(transactionsDao.getAllUsers().map { it -> it.mapToUser() }))

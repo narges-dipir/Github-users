@@ -13,7 +13,7 @@ interface GithubUsersDao {
     suspend fun insertUser(transaction: UserEntity)
 
     @Query("SELECT * FROM UserTable ")
-    fun getAllUsers(): List<UserEntity>
+    suspend fun getAllUsers(): List<UserEntity>
 
     @Delete
     suspend fun deleteUser(transaction: UserEntity)

@@ -14,7 +14,9 @@ import com.example.githubusers.view.components.GithubUserDetailsScreen
 import com.example.githubusers.view.components.GithubUsersScreen
 import com.example.githubusers.view.navigation.Navigation
 import com.example.githubusers.view.ui.theme.GithubUsersTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
