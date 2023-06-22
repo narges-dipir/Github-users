@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.githubusers.view.navigation.Navigation
 import com.example.githubusers.viewModel.GithubUsersViewModel
+import com.example.githubusers.viewModel.state.UserListEvent
 import com.example.githubusers.viewModel.state.UserListState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -38,7 +39,13 @@ fun GithubUsersScreen(
     ) {
         OutlinedTextField(
             value = state.searchQuery,
-            onValueChange = {},
+            onValueChange = {
+                viewModel.onEvent(
+                    UserListEvent.OnSearchQueryChange(it)
+                )
+                if (it =="")
+                    viewModel.onEvent(UserListEvent.Refresh)
+            },
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
@@ -51,6 +58,7 @@ fun GithubUsersScreen(
         SwipeRefresh(
             state = swipeRefreshState,
             onRefresh = {
+                        viewModel.onEvent(UserListEvent.Refresh)
             },
         ) {
             LazyColumn(
@@ -62,10 +70,11 @@ fun GithubUsersScreen(
                         user = user,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable {
-                                navController.navigate(Navigation.GithubUserDetailScreen.route + "/${user.id}")
-                            }
+                            .clickable {}
                             .padding(16.dp),
+                        onItemClick = {
+                            navController.navigate(Navigation.GithubUserDetailsScreen.route + "/${user.id}")
+                        }
                     )
                     if (i < state.users.size) {
                         Divider(

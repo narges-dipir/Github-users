@@ -30,16 +30,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.githubusers.R
 import com.example.githubusers.model.models.User
+import com.example.githubusers.viewModel.GithubUserDetailViewModel
+
 
 @Composable
 fun GithubUserDetailsScreen(
-    user: User? = null,
+   // user: User? = null,
     nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
+    viewModel: GithubUserDetailViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
+    val state = viewModel.state.value
+    state.user?.let {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
@@ -54,16 +60,17 @@ fun GithubUserDetailsScreen(
             ) {
                 ProfileHeader(
                     scrollState,
-                    user!!,
+                    it,
                     this@BoxWithConstraints.maxHeight,
                 )
                 GeneralInfo(
-                    user,
+                    it,
                     this@BoxWithConstraints.maxHeight,
                 )
             }
         }
     }
+}
 }
 
 @Composable
@@ -104,13 +111,16 @@ private fun GeneralInfo(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = user.login,
-            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
             style = MaterialTheme.typography.bodyLarge,
         )
         Text(
             text = user.score.toString(),
             modifier = Modifier
-                .fillMaxWidth().wrapContentHeight()
+                .fillMaxWidth()
+                .wrapContentHeight()
                 .padding(bottom = 32.dp),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -118,26 +128,34 @@ private fun GeneralInfo(
         Divider()
         Text(
             text = "user type: " + user.type,
-            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
         Text(
             text = "organization: " + user.organizations_url,
-            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Text(
             text = "followers: " + user.followers_url,
-            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Text(
             text = "following: " + user.following_url,
-            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -169,7 +187,5 @@ fun previewUserDetail() {
         false,
         1.0,
     )
-    GithubUserDetailsScreen(
-        user = user,
-    )
+
 }

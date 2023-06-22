@@ -10,11 +10,23 @@ import com.example.githubusers.model.local.entities.UserEntity
 @Dao
 interface GithubUsersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(transaction: UserEntity)
+    suspend fun insertUser(userEntity: UserEntity)
 
     @Query("SELECT * FROM UserTable ")
     suspend fun getAllUsers(): List<UserEntity>
 
+    @Query("SELECT * FROM UserTable WHERE id = :id ")
+    suspend fun getUserById(id: Int): UserEntity
+
     @Delete
-    suspend fun deleteUser(transaction: UserEntity)
+    suspend fun deleteUser(userEntity: UserEntity)
+
+    @Query(
+        """
+            SELECT * 
+            FROM UserTable
+            WHERE LOWER(login) LIKE '%' || LOWER(:query) || '%'
+        """
+    )
+    suspend fun searchUser(query: String): UserEntity
 }

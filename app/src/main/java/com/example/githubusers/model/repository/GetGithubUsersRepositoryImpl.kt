@@ -12,19 +12,25 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class GetGithubUsersRepositoryImpl @Inject constructor(
-    private val transactionApi: GithubUsersApi,
-    private val transactionsDao: GithubUsersDao,
+    private val githubUsersApi: GithubUsersApi,
+    private val githubUsersDao: GithubUsersDao,
 ) : IGetGithubUsersRepository {
     override suspend fun getAllUsers(): Flow<ResultWrapper<List<User>>> = flow {
         try {
             emit(ResultWrapper.Loading)
-            if (transactionsDao.getAllUsers().isNotEmpty()) {
-                emit(ResultWrapper.Success(transactionsDao.getAllUsers().map { it -> it.mapToUser() }))
+            if (githubUsersDao.getAllUsers().isNotEmpty()) {
+                emit(
+                    ResultWrapper.Success(
+                        githubUsersDao.getAllUsers().map { it -> it.mapToUser() })
+                )
             } else {
-                transactionApi.getAllUsers().items.forEach {
+                githubUsersApi.getAllUsers().items.forEach {
                     saveUser(it.mapToUser())
                 }
-                emit(ResultWrapper.Success(transactionsDao.getAllUsers().map { it -> it.mapToUser() }))
+                emit(
+                    ResultWrapper.Success(
+                        githubUsersDao.getAllUsers().map { it -> it.mapToUser() })
+                )
             }
         } catch (e: HttpException) {
             emit(ResultWrapper.Error(e))
@@ -32,6 +38,29 @@ class GetGithubUsersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveUser(user: User) {
-        transactionsDao.insertUser(user.mapToEntity())
+        githubUsersDao.insertUser(user.mapToEntity())
     }
+
+    override suspend fun getUserById(id: Int): Flow<ResultWrapper<User>> = flow {
+        try {
+            emit(ResultWrapper.Loading)
+            val result = githubUsersDao.getUserById(id)
+            emit(ResultWrapper.Success(result.mapToUser()))
+        } catch (e: HttpException) {
+            emit(ResultWrapper.Error(e))
+        }
+    }
+
+    override suspend fun searchUser(query: String): Flow<ResultWrapper<User>> = flow {
+        try {
+            emit(ResultWrapper.Loading)
+            val result = githubUsersDao.searchUser(query)
+            if (result!= null)
+            emit(ResultWrapper.Success(result.mapToUser()))
+        } catch (e: HttpException) {
+            emit(ResultWrapper.Error(e))
+        }
+    }
+
+
 }

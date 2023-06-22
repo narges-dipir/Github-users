@@ -51,7 +51,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTransactionApi(retrofit: Retrofit): GithubUsersApi {
+    fun provideGithubUsersApi(retrofit: Retrofit): GithubUsersApi {
         return retrofit.create(GithubUsersApi::class.java)
     }
 }

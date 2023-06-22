@@ -1,7 +1,7 @@
 package com.example.githubusers.model.mappers
 
 import com.example.githubusers.model.local.entities.UserEntity
-import com.example.githubusers.model.models.GithubUsersResponse
+import com.example.githubusers.model.models.GithubUserResponse
 import com.example.githubusers.model.models.User
 
 fun UserEntity.mapToUser(): User {
@@ -52,7 +52,7 @@ fun User.mapToEntity(): UserEntity {
     )
 }
 
-fun GithubUsersResponse.mapToUser(): User {
+fun GithubUserResponse.mapToUser(): User {
     return User(
         login,
         id,
@@ -76,8 +76,8 @@ fun GithubUsersResponse.mapToUser(): User {
     )
 }
 
-fun User.mapToGithubUserResponse(): GithubUsersResponse {
-    return GithubUsersResponse(
+fun User.mapToGithubUserResponse(): GithubUserResponse {
+    return GithubUserResponse(
         login,
         id,
         node_id,

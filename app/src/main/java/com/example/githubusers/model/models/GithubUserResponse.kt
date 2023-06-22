@@ -3,7 +3,7 @@ package com.example.githubusers.model.models
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class GithubUsersResponse(
+data class GithubUserResponse(
     @SerializedName("login")
     @Expose
     val login: String,

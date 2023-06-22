@@ -28,7 +28,7 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideTransactionTable(blueApplicationDatabase: GithubUsersDatabase): GithubUsersDao {
+    fun provideGithubUsersTable(blueApplicationDatabase: GithubUsersDatabase): GithubUsersDao {
         return blueApplicationDatabase.githubUsersDao
     }
 }

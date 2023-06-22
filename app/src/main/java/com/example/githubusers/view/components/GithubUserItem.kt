@@ -40,12 +40,13 @@ import com.example.githubusers.view.ui.theme.MelloLightBlack
 fun GithubUserItem(
     modifier: Modifier = Modifier.background(color = Color.White),
     user: User,
+    onItemClick: (User) -> Unit
 ) {
     Row(
         modifier =
         Modifier
             .fillMaxWidth()
-            .clickable { },
+            .clickable {onItemClick(user) },
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -96,32 +97,4 @@ fun GithubUserItem(
     }
 }
 
-@Preview
-@Composable
-fun previewUserItem() {
-    val user = User(
-        "torvalds",
-        1024025,
-        "MDQ6VXNlcjEwMjQwMjU=",
-        "https://avatars.githubusercontent.com/u/1024025?v=4",
-        "",
-        "https://api.github.com/users/torvalds",
-        "https://github.com/torvalds",
-        "https://api.github.com/users/torvalds/followers",
-        "https://api.github.com/users/torvalds/following{/other_user}",
-        "https://api.github.com/users/torvalds/gists{/gist_id}",
-        "https://api.github.com/users/torvalds/starred{/owner}{/repo}",
-        "https://api.github.com/users/torvalds/subscriptions",
-        "https://api.github.com/users/torvalds/orgs",
-        "https://api.github.com/users/torvalds/repos",
-        "https://api.github.com/users/torvalds/events{/privacy}",
-        "https://api.github.com/users/torvalds/received_events",
-        "User",
-        false,
-        1.0,
-    )
-    GithubUserItem(
-        modifier = Modifier.fillMaxWidth(),
-        user = user,
-    )
-}
+

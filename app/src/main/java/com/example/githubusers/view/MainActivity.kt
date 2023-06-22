@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                             GithubUsersScreen(navController = navController)
                         }
                         composable(
-                            route = Navigation.GithubUsersScreen.route + "/{userId}",
+                            route = Navigation.GithubUserDetailsScreen.route + "/{id}",
                         ) {
                             GithubUserDetailsScreen()
                         }

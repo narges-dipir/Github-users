@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface IGetGithubUsersRepository {
     suspend fun getAllUsers(): Flow<ResultWrapper<List<User>>>
     suspend fun saveUser(user: User)
+    suspend fun getUserById(id: Int): Flow<ResultWrapper<User>>
+    suspend fun searchUser(query: String): Flow<ResultWrapper<User>>
 }

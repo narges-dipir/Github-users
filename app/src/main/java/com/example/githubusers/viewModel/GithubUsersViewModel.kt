@@ -11,6 +11,7 @@ import com.example.githubusers.viewModel.state.UserListEvent
 import com.example.githubusers.viewModel.state.UserListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,19 +21,30 @@ class GithubUsersViewModel @Inject constructor(
 ) : ViewModel() {
     var state by mutableStateOf(UserListState())
     private var searchJob: Job? = null
+
     init {
         getGithubUsers()
     }
+
     fun onEvent(event: UserListEvent) {
         when (event) {
-            is UserListEvent.OnSearchQueryChange -> querySearch(event.query)
+            is UserListEvent.OnSearchQueryChange -> {
+                state = state.copy(searchQuery = event.query)
+                searchJob?.cancel()
+                searchJob = viewModelScope.launch {
+                    delay(500L)
+                    querySearch()
+                }
+            }
+
             UserListEvent.Refresh -> {
                 getGithubUsers()
             }
         }
     }
 
-    private fun getGithubUsers() {
+    private fun getGithubUsers(
+    ) {
         viewModelScope.launch {
             getGithubUsersRepository.getAllUsers().collect { result ->
                 when (result) {
@@ -43,6 +55,7 @@ class GithubUsersViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is ResultWrapper.Error -> Unit
                     is ResultWrapper.Loading -> {
                         state = state.copy(isLoading = true)
@@ -51,8 +64,29 @@ class GithubUsersViewModel @Inject constructor(
             }
         }
     }
+
     private fun querySearch(
-        query: String,
+        query: String = state.searchQuery.lowercase(),
     ) {
+        viewModelScope.launch {
+            getGithubUsersRepository.searchUser(query).collect { result ->
+                when (result) {
+                    is ResultWrapper.Success -> {
+                        result.data?.let { user ->
+                            state = state.copy(
+                                users = listOf(user),
+                            )
+                        }
+                    }
+
+                    is ResultWrapper.Error -> Unit
+                    is ResultWrapper.Loading -> {
+                        state = state.copy(isLoading = true)
+                    }
+                }
+
+            }
+        }
+
     }
 }
