@@ -52,11 +52,14 @@ class GithubUsersViewModel @Inject constructor(
                         result.data?.let { users ->
                             state = state.copy(
                                 users = users,
+                                isLoading = false
                             )
                         }
                     }
 
-                    is ResultWrapper.Error -> Unit
+                    is ResultWrapper.Error -> {
+                        state = state.copy(isLoading = false)
+                    }
                     is ResultWrapper.Loading -> {
                         state = state.copy(isLoading = true)
                     }
@@ -75,11 +78,14 @@ class GithubUsersViewModel @Inject constructor(
                         result.data?.let { user ->
                             state = state.copy(
                                 users = listOf(user),
+                                isLoading = false
                             )
                         }
                     }
 
-                    is ResultWrapper.Error -> Unit
+                    is ResultWrapper.Error -> {
+                        state = state.copy(isLoading = false)
+                    }
                     is ResultWrapper.Loading -> {
                         state = state.copy(isLoading = true)
                     }

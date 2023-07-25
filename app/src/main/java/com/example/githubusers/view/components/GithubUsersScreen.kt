@@ -1,5 +1,8 @@
 package com.example.githubusers.view.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +15,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -34,16 +41,26 @@ fun GithubUsersScreen(
     val swipeRefreshState = rememberSwipeRefreshState(
         isRefreshing = viewModel.state.isRefreshing,
     )
+    var loadingVisibility by remember { mutableStateOf(viewModel.state.isLoading) }
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
+
+        AnimatedVisibility(
+            visible = loadingVisibility,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+        }
         OutlinedTextField(
             value = state.searchQuery,
             onValueChange = {
                 viewModel.onEvent(
                     UserListEvent.OnSearchQueryChange(it)
                 )
-                if (it =="")
+                if (it == "")
                     viewModel.onEvent(UserListEvent.Refresh)
             },
             modifier = Modifier
@@ -58,9 +75,10 @@ fun GithubUsersScreen(
         SwipeRefresh(
             state = swipeRefreshState,
             onRefresh = {
-                        viewModel.onEvent(UserListEvent.Refresh)
+                viewModel.onEvent(UserListEvent.Refresh)
             },
         ) {
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
             ) {
@@ -97,9 +115,7 @@ fun GithubUsersScreen(
                 }
             }
         }
-
-        if (state.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-        }
     }
+
 }
+
